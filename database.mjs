@@ -1,32 +1,54 @@
 import sqlite3 from 'sqlite3';
 
-// Connects to the SQLite database file.
-// The database file is created if it does not exist.
+// Connect to the SQLite database file.
+// The file is created if it does not exist.
 const db = new sqlite3.Database('./database.db', (err) => {
   if (err) {
-    // If there is an error, log it to the console.
+    // Log an error if the connection fails.
     console.error('Error connecting to the database:', err.message);
   } else {
-    // If the connection is successful, log a success message.
+    // Log a success message.
     console.log('Successfully connected to the database.');
     
-    // Create a 'users' table if it doesn't already exist.
-    // This is good practice to avoid errors if the script is run multiple times.
-    db.run(`CREATE TABLE IF NOT EXISTS users (
+    // Create the 'contact_messages' table if it doesn't already exist.
+    db.run(`CREATE TABLE IF NOT EXISTS contact_messages (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
-      age INTEGER
+      email TEXT NOT NULL,
+      message TEXT NOT NULL,
+      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
     )`, (err) => {
       if (err) {
-        // If there is an error creating the table, log it.
-        console.error('Failed to create the "users" table:', err.message);
+        // Log an error if table creation fails.
+        console.error('Failed to create the "contact_messages" table:', err.message);
       } else {
-        // If the table is created successfully, log a confirmation.
-        console.log('The "users" table has been created or already exists.');
+        // Log a confirmation message.
+        console.log('The "contact_messages" table has been created or already exists.');
       }
     });
   }
 });
 
-// Export the database connection object so it can be used in other files.
+// Function to save a contact message to the database.
+export const saveContactMessage = (message) => {
+    return new Promise((resolve, reject) => {
+        const { name, email, message: userMessage } = message;
+        const sql = `INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)`;
+        
+        // Execute the SQL query with the message data.
+        db.run(sql, [name, email, userMessage], function(err) {
+            if (err) {
+                // Reject the Promise if an error occurs.
+                console.error('Error inserting data:', err.message);
+                reject(err);
+            } else {
+                // Resolve the Promise with the ID of the new row.
+                console.log(`A row has been inserted with rowid ${this.lastID}`);
+                resolve(this.lastID);
+            }
+        });
+    });
+};
+
+// Export the database connection object.
 export default db;
