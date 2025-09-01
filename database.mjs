@@ -1,67 +1,32 @@
 import sqlite3 from 'sqlite3';
-import { fileURLToPath } from 'url';
-import path from 'path';
 
-// Workaround para __dirname em ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Caminho para o arquivo do banco
-const dbPath = path.join(__dirname, 'database.db');
-
-// Conectar ao banco
-const db = new sqlite3.Database(dbPath, (err) => {
+// Connects to the SQLite database file.
+// The database file is created if it does not exist.
+const db = new sqlite3.Database('./database.db', (err) => {
   if (err) {
-    console.error(err.message);
+    // If there is an error, log it to the console.
+    console.error('Error connecting to the database:', err.message);
   } else {
-    console.log('Connected to the SQLite database.');
+    // If the connection is successful, log a success message.
+    console.log('Successfully connected to the database.');
+    
+    // Create a 'users' table if it doesn't already exist.
+    // This is good practice to avoid errors if the script is run multiple times.
+    db.run(`CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      age INTEGER
+    )`, (err) => {
+      if (err) {
+        // If there is an error creating the table, log it.
+        console.error('Failed to create the "users" table:', err.message);
+      } else {
+        // If the table is created successfully, log a confirmation.
+        console.log('The "users" table has been created or already exists.');
+      }
+    });
   }
 });
 
-// Operações no banco
-db.serialize(() => {
-  // Criar tabela
-  db.run(
-    `CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY,
-      name TEXT,
-      age INTEGER
-    )`,
-    (err) => {
-      if (err) {
-        console.error('Error creating table:', err.message);
-      } else {
-        console.log('Table "users" created successfully.');
-
-        // Inserir novo usuário
-        const insertStmt = db.prepare("INSERT INTO users (name, age) VALUES (?, ?)");
-        insertStmt.run("John Doe", 30, function (err) {
-          if (err) {
-            console.error('Error inserting data:', err.message);
-          } else {
-            console.log(`Row inserted with ID: ${this.lastID}`);
-
-            // Consultar dados
-            db.each("SELECT id, name, age FROM users", (err, row) => {
-              if (err) {
-                console.error('Error querying data:', err.message);
-              } else {
-                console.log(`ID: ${row.id}, Name: ${row.name}, Age: ${row.age}`);
-              }
-            }, () => {
-              // Fechar conexão
-              db.close((err) => {
-                if (err) {
-                  console.error(err.message);
-                } else {
-                  console.log('Database connection closed.');
-                }
-              });
-            });
-          }
-        });
-        insertStmt.finalize();
-      }
-    }
-  );
-});
+// Export the database connection object so it can be used in other files.
+export default db;
