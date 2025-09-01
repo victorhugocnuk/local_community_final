@@ -17,6 +17,7 @@
         --card-background: #fff;
     }
 
+    
     body {
         font-family: 'Inter', sans-serif;
         background-color: var(--background-color);
@@ -155,6 +156,37 @@
         padding: 2rem;
         margin-top: 3rem;
     }
+
+    /*
+ * ================================
+ * Responsive Styles
+ * ================================
+ */
+
+/* For screens up to 768px (e.g., tablets) */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .header .nav-links {
+        display: none; /* Hide nav links on smaller screens */
+        flex-direction: column;
+        background-color: #333;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+    }
+
+    .header .nav-links.active {
+        display: flex;
+    }
+
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
 </style>
 
 </head>
