@@ -1,1 +1,1 @@
-{"name":"local_communit","version":"1.0.0","description":"A web application for a local community portal.","main":"index.js","scripts":{"start":"node index.js"},"dependencies":{"better-sqlite3":"^9.6.0","ejs":"^3.1.9","express":"^4.18.2","sqlite3":"^5.1.7"}}
+{"name":"local_communit","version":"1.0.0","description":"A web application for a local community portal.","main":"index.js","scripts":{"start":"node index.js"},"dependencies":{"better-sqlite3":"^9.6.0","ejs":"^3.1.10","express":"^4.21.2","sqlite3":"^5.1.7"}}

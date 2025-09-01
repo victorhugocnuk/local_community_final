@@ -1,38 +1,41 @@
-// index.mjs
-
-// Import the Express framework to create the server application.
+// --- Imports and Configurations ---
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// Define the port number on which the server will listen for requests.
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const PORT = 5000;
-
-// Initialize the Express application instance.
 const app = express();
 
+// --- EJS and Directory Setup ---
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// --- Event Data ---
+// This is the data that will be passed to your EJS template
+const eventData = {
+    title: "Local Developer Meetup",
+    description: "Connect, collaborate, and learn with the local tech community!",
+    imageURL: "https://placehold.co/800x400/805ad5/fff?text=Community+Hub",
+    location: "Convention Center",
+    date: "October 25, 2025",
+    time: "7:00 PM"
+};
+
 // --- Route Definitions ---
-
-// Define the root route ('/').
-// When a GET request is made to this path, the server responds with a simple welcome message.
 app.get('/', (req, res) => {
-  res.send('Welcome to the Community Portal!');
+    // Renders the 'index.ejs' template and passes the 'eventData' object as 'event'
+    res.render('index', { event: eventData });
 });
 
-// Define the '/faq' route.
-// This route is designed to handle GET requests for the FAQ page.
+// An example route for a static page
 app.get('/faq', (req, res) => {
-  res.send('This is the FAQ Page.');
-});
-
-// Define the '/contact' route.
-// This route provides a message for the contact page upon a GET request.
-app.get('/contact', (req, res) => {
-  res.send('You can contact us here.');
+    res.send('This is the FAQ Page.');
 });
 
 // --- Server Initialization ---
-
-// Start the server, making it listen for connections on the specified port.
-// A callback function logs a confirmation message to the console upon successful startup.
 app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+    console.log(`Server is running at http://localhost:${PORT}`);
 });
