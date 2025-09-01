@@ -1,38 +1,57 @@
+// Importing necessary libraries for the project
 import express from 'express';
-import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { open } from 'sqlite';
+import sqlite3 from 'sqlite3';
 
-// The error was here.
-// This import assumes mockData.js has a default export.
-// Since it doesn't, we import the getData function directly instead.
-import { getData } from './mockData.js'; 
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Define the port number on which the server will listen for requests.
-const PORT = 5000;
-
-// Initialize the Express application instance.
+// Initializing the Express server
 const app = express();
+const port = 5000;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Root route ('/')
+// Middleware to serve static files from the 'public' folder
+app.use(express.static('public'));
+
+// Configuring EJS as the view engine and setting the views directory
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
+// Asynchronous function to start the connection to the SQLite database
+let db;
+(async () => {
+    try {
+        db = await open({
+            filename: './database.db',
+            driver: sqlite3.Database,
+        });
+        console.log('Connected to SQLite database.');
+    } catch (error) {
+        console.error('Failed to connect to the database:', error);
+    }
+})();
+
+// Middleware to process form data (for future use)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Main route for the home page
 app.get('/', (req, res) => {
-    res.send('Welcome to the Community Portal!');
+    // Render the home.ejs page
+    res.render('home');
 });
 
-// FAQ page route
-app.get('/faq', (req, res) => {
-    res.send('This is the FAQ Page.');
-});
-
-// Contact page route
+// Route for the contact page
 app.get('/contact', (req, res) => {
-    res.send('You can contact us here.');
+    res.render('contact');
 });
 
-// Start the server, making it listen for connections on the specified port.
-// A callback function logs a confirmation message to the console upon successful startup.
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+// Route for the FAQ page
+app.get('/faq', (req, res) => {
+    res.render('faq');
+});
+
+// Starting the server on the defined port
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
 });
