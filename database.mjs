@@ -52,3 +52,29 @@ export const saveContactMessage = (message) => {
 
 // Export the database connection object.
 export default db;
+
+// ... existing database setup code ...
+
+// Create and populate the events table
+db.exec(`
+  CREATE TABLE IF NOT EXISTS events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    date TEXT NOT NULL,
+    category TEXT NOT NULL,
+    year INTEGER NOT NULL
+  );
+`);
+
+// Check if events table is empty, and if so, populate with sample data
+const eventsCheck = db.prepare("SELECT COUNT(*) AS count FROM events").get();
+if (eventsCheck.count === 0) {
+  const insert = db.prepare("INSERT INTO events (name, description, date, category, year) VALUES (?, ?, ?, ?, ?)");
+  insert.run('Annual CodeFest Hackathon', 'A 24-hour coding marathon for all skill levels.', '2025-08-15', 'Competition', 2025);
+  insert.run('Local Developer Meetup', 'A casual gathering to network and share ideas.', '2025-09-20', 'Networking', 2025);
+  insert.run('JavaScript Workshop', 'Learn the fundamentals of modern JavaScript.', '2025-09-05', 'Workshop', 2025);
+  insert.run('Frontend Design Trends', 'A talk on the latest trends in UI/UX and web design.', '2024-05-10', 'Talk', 2024);
+  insert.run('Backend Security Basics', 'A workshop on securing server-side applications.', '2024-06-15', 'Workshop', 2024);
+  insert.run('Introduction to Databases', 'An introductory session on SQL and database design.', '2024-03-25', 'Workshop', 2024);
+}

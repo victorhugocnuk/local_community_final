@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Events</title>
+    <style>
+        :root {
+            --primary-color: #6a1b9a;
+            --secondary-color: #4a148c;
+            --background-color: #f8f8f8;
+            --text-color: #333;
+            --light-text-color: #eee;
+            --card-background: #fff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .header {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        .header .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .header .nav-links a {
+            color: var(--light-text-color);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .header .nav-links a:hover {
+            color: #d1adff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+        .event-card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1rem;
+        }
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        .event-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+        .event-meta {
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filters select, .filters button {
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        .filters button {
+            cursor: pointer;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .filters button:hover {
+            background-color: var(--secondary-color);
+        }
+        .footer {
+            background-color: #222;
+            color: var(--light-text-color);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        #eventDetails {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            position: relative;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">DevConnect</div>
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/faq">FAQ</a>
+            <a href="/contact">Contact</a>
+            <a href="/events">Events</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="container">
+            <h2 class="section-title">Community Events</h2>
+            <div class="filters">
+                <label for="year-filter">Filter by Year:</label>
+                <select id="year-filter">
+                    <option value="all">All Years</option>
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                </select>
+                <label for="category-filter">Filter by Category:</label>
+                <select id="category-filter">
+                    <option value="all">All Categories</option>
+                    <option value="Competition">Competition</option>
+                    <option value="Networking">Networking</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Talk">Talk</option>
+                </select>
+            </div>
+            <div id="events-list">
+                <!-- Events will be dynamically loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <div id="eventDetails">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3 id="modal-title"></h3>
+            <p id="modal-date"></p>
+            <p id="modal-category"></p>
+            <p id="modal-description"></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 Local Developer Meetup. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const yearFilter = document.getElementById('year-filter');
+        const categoryFilter = document.getElementById('category-filter');
+        const eventsList = document.getElementById('events-list');
+
+        async function fetchEvents() {
+            const year = yearFilter.value;
+            const category = categoryFilter.value;
+            const url = `/api/events?year=${year}&category=${category}`;
+
+            try {
+                const response = await fetch(url);
+                const events = await response.json();
+                renderEvents(events);
+            } catch (error) {
+                console.error('Error fetching events:', error);
+                eventsList.innerHTML = '<p>Failed to load events. Please try again later.</p>';
+            }
+        }
+
+        function renderEvents(events) {
+            eventsList.innerHTML = '';
+            if (events.length === 0) {
+                eventsList.innerHTML = '<p>No events found matching your criteria.</p>';
+                return;
+            }
+
+            events.forEach(event => {
+                const isPastEvent = new Date(event.date) < new Date();
+                const eventCard = document.createElement('div');
+                eventCard.className = 'event-card';
+                eventCard.innerHTML = `
+                    <h4 class="event-title">${event.name}</h4>
+                    <p class="event-meta">
+                        Date: ${event.date} | Category: ${event.category}
+                        ${isPastEvent ? ' | <strong>(Past Event)</strong>' : ''}
+                    </p>
+                    <p>${event.description.substring(0, 100)}...</p>
+                `;
+                eventCard.addEventListener('click', () => showEventDetails(event.id));
+                eventsList.appendChild(eventCard);
+            });
+        }
+
+        async function showEventDetails(id) {
+            try {
+                const response = await fetch(`/api/events/${id}`);
+                const event = await response.json();
+                
+                document.getElementById('modal-title').textContent = event.name;
+                document.getElementById('modal-date').textContent = `Date: ${event.date}`;
+                document.getElementById('modal-category').textContent = `Category: ${event.category}`;
+                document.getElementById('modal-description').textContent = event.description;
+                document.getElementById('eventDetails').style.display = 'block';
+            } catch (error) {
+                console.error('Error fetching event details:', error);
+            }
+        }
+
+        // Close the modal when the user clicks on <span> (x)
+        document.querySelector('.close-btn').onclick = function() {
+            document.getElementById('eventDetails').style.display = 'none';
+        }
+
+        // Close the modal when the user clicks anywhere outside of the modal
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('eventDetails')) {
+                document.getElementById('eventDetails').style.display = 'none';
+            }
+        }
+
+        yearFilter.addEventListener('change', fetchEvents);
+        categoryFilter.addEventListener('change', fetchEvents);
+
+        // Initial fetch to load all events
+        fetchEvents();
+    </script>
+</body>
+</html>

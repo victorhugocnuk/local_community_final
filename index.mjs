@@ -78,3 +78,50 @@ app.get('/developers', (req, res) => {
     ];
     res.json(developers);
 });
+
+// ... existing routes ...
+
+// New AJAX route to get filtered events
+app.get('/api/events', (req, res) => {
+    const { year, category } = req.query;
+    let query = "SELECT * FROM events WHERE 1=1";
+    const params = [];
+
+    if (year && year !== 'all') {
+        query += " AND year = ?";
+        params.push(year);
+    }
+    if (category && category !== 'all') {
+        query += " AND category = ?";
+        params.push(category);
+    }
+
+    try {
+        const events = db.prepare(query).all(params);
+        res.json(events);
+    } catch (error) {
+        console.error('Database query error:', error);
+        res.status(500).json({ error: 'Failed to retrieve events' });
+    }
+});
+
+// Route to get a single event by ID
+app.get('/api/events/:id', (req, res) => {
+    const { id } = req.params;
+    try {
+        const event = db.prepare("SELECT * FROM events WHERE id = ?").get(id);
+        if (event) {
+            res.json(event);
+        } else {
+            res.status(404).json({ error: 'Event not found' });
+        }
+    } catch (error) {
+        console.error('Database query error:', error);
+        res.status(500).json({ error: 'Failed to retrieve event' });
+    }
+});
+
+// New route for the events page
+app.get('/events', (req, res) => {
+    res.render('events');
+});
