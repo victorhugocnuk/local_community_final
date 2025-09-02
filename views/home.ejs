@@ -1,243 +1,384 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Local Developer Meetup</title>
-<style>
-@import url('https://www.google.com/search?q=https://fonts.googleapis.com/css2%3Ffamily%3DInter:wght%40400%3B700%26display%3Dswap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevConnect</title>
+    <style>
+        :root {
+            --primary-color: #6a1b9a;
+            --secondary-color: #4a148c;
+            --background-color: #f8f8f8;
+            --text-color: #333;
+            --light-text-color: #eee;
+            --card-background: #fff;
+        }
 
-    :root {
-        --primary-color: #6a1b9a;
-        --secondary-color: #4a148c;
-        --background-color: #f0f4f8;
-        --text-color: #333;
-        --light-text-color: #f0f0f0;
-        --card-background: #fff;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
 
-    
-    body {
-        font-family: 'Inter', sans-serif;
-        background-color: var(--background-color);
-        color: var(--text-color);
-        margin: 0;
-        padding: 0;
-        line-height: 1.6;
-    }
+        .header {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--secondary-color);
+        }
 
-    .header {
-        background-color: var(--primary-color);
-        color: var(--light-text-color);
-        padding: 1rem 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        border-bottom: 3px solid var(--secondary-color);
-    }
+        .header .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
 
-    .header .logo {
-        font-size: 1.8rem;
-        font-weight: bold;
-    }
+        .header .nav-links a {
+            color: var(--light-text-color);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
 
-    .header nav a {
-        color: var(--light-text-color);
-        text-decoration: none;
-        margin-left: 1.5rem;
-        font-weight: bold;
-        transition: color 0.3s ease;
-    }
+        .header .nav-links a:hover {
+            color: #d1adff;
+        }
 
-    .header nav a:hover {
-        color: #d1c4e9;
-    }
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://placehold.co/1200x600/6a1b9a/ffffff?text=Developer+Community+Meetup') no-repeat center center/cover;
+            color: var(--light-text-color);
+        }
 
-    .hero {
-        text-align: center;
-        padding: 4rem 2rem;
-        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://placehold.co/1200x600/6a1b9a/ffffff?text=Developer+Community+Meetup') no-repeat center center/cover;
-        color: var(--light-text-color);
-    }
+        .hero h1 {
+            font-size: 3rem;
+            margin: 0;
+        }
 
-    .hero h1 {
-        font-size: 3rem;
-        margin: 0;
-    }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0.5rem auto 1.5rem;
+        }
 
-    .hero p {
-        font-size: 1.2rem;
-        max-width: 600px;
-        margin: 1rem auto;
-    }
+        .button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
 
-    .container {
-        padding: 2rem;
-        max-width: 1000px;
-        margin: auto;
-    }
+        .button:hover {
+            background-color: var(--secondary-color);
+        }
 
-    .section-title {
-        text-align: center;
-        font-size: 2.5rem;
-        margin-bottom: 2rem;
-        color: var(--secondary-color);
-        position: relative;
-    }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            position: relative;
+            margin-bottom: 2rem;
+        }
 
-    .section-title::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 4px;
-        background-color: var(--primary-color);
-        border-radius: 2px;
-    }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
 
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-    .card {
-        background-color: var(--card-background);
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        text-align: left;
-    }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
 
-    .card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
+        .card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    .card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-    }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
 
-    .card h3 {
-        color: var(--primary-color);
-        margin-top: 0;
-        font-size: 1.5rem;
-    }
+        .card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
 
-    .button {
-        display: inline-block;
-        padding: 0.75rem 1.5rem;
-        background-color: var(--primary-color);
-        color: var(--light-text-color);
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: bold;
-        transition: background-color 0.3s ease;
-        text-align: center;
-    }
+        .card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
 
-    .button:hover {
-        background-color: var(--secondary-color);
-    }
+        .footer {
+            background-color: #222;
+            color: var(--light-text-color);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
 
-    .footer {
-        background-color: #222;
-        color: var(--light-text-color);
-        text-align: center;
-        padding: 2rem;
-        margin-top: 3rem;
-    }
+        /* Interactive Quiz CSS */
+        .quiz-container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+        .quiz-question {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        .quiz-options {
+            list-style: none;
+            padding: 0;
+        }
+        .quiz-options li {
+            background: #f4f4f4;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .quiz-options li:hover {
+            background: #e0e0e0;
+        }
+        .quiz-result {
+            margin-top: 1.5rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: center;
+        }
 
-    /*
- * ================================
- * Responsive Styles
- * ================================
- */
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
 
-/* For screens up to 768px (e.g., tablets) */
-@media (max-width: 768px) {
-    .container {
-        padding: 1rem;
-    }
+            .header .nav-links {
+                display: none;
+                flex-direction: column;
+                background-color: var(--primary-color);
+                position: absolute;
+                top: 60px;
+                right: 0;
+                width: 100%;
+            }
 
-    .header .nav-links {
-        display: none; /* Hide nav links on smaller screens */
-        flex-direction: column;
-        background-color: #333;
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 100%;
-    }
+            .header .nav-links.active {
+                display: flex;
+            }
 
-    .header .nav-links.active {
-        display: flex;
-    }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
 
-    .hero-section h1 {
-        font-size: 2rem;
-    }
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
 
-</style>
+            .grid {
+                grid-template-columns: 1fr;
+            }
 
+            .card {
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header class="header">
+        <div class="logo">DevConnect</div>
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/faq">FAQ</a>
+            <a href="/contact">Contact</a>
+        </nav>
+    </header>
 
-<!-- Header section with logo and navigation -->
-<header class="header">
-    <div class="logo">DevConnect</div>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/faq">FAQ</a>
-        <a href="/contact">Contact</a>
-    </nav>
-</header>
+    <main>
+        <section class="hero">
+            <h1>Connect. Learn. Grow.</h1>
+            <p>The community for local developers of all skill levels. Join our meetups and elevate your programming skills.</p>
+            <a href="#" class="button">Join Us!</a>
+        </section>
 
-<!-- Hero section with a background image and main message -->
-<section class="hero">
-    <h1>Connect. Learn. Grow.</h1>
-    <p>The community for local developers of all skill levels. Join our meetups and elevate your programming skills.</p>
-    <a href="/contact" class="button">Join Us!</a>
-</section>
+        <section class="container">
+            <h2 class="section-title">What We Do</h2>
+            <div class="grid">
+                <div class="card">
+                    <img src="https://placehold.co/400x240/6a1b9a/ffffff?text=Workshops" alt="Image of a coding workshop">
+                    <h3>Talks and Workshops</h3>
+                    <p>Learn from industry leaders in our monthly events. We cover everything from modern frameworks to software architecture.</p>
+                </div>
+                <div class="card">
+                    <img src="https://placehold.co/400x240/6a1b9a/ffffff?text=Networking" alt="Image of developers networking">
+                    <h3>Peer-to-Peer Networking</h3>
+                    <p>Meet other professionals and build your network. It's a great opportunity for collaboration and exchanging ideas.</p>
+                </div>
+                <div class="card">
+                    <img src="https://placehold.co/400x240/6a1b9a/ffffff?text=Projects+and+Collaboration" alt="Image of a team collaborating on a project">
+                    <h3>Projects and Collaboration</h3>
+                    <p>Work on open-source projects with the community. Turn your ideas into reality and showcase your skills.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Interactive Quiz Section -->
+        <section class="container quiz-container">
+            <h2 class="section-title">Test Your Knowledge!</h2>
+            <div id="quiz-content">
+                <div class="quiz-question"></div>
+                <ul class="quiz-options"></ul>
+                <div class="quiz-result"></div>
+            </div>
+        </section>
 
-<!-- Main content section with different cards -->
-<div class="container">
-    <h2 class="section-title">What We Do</h2>
-    <div class="grid">
-        <!-- Card for Talks and Workshops -->
-        <div class="card">
-            <img src="https://placehold.co/600x400/8e24aa/ffffff?text=Talks+and+Workshops" alt="Image of a coding workshop">
-            <h3>Talks & Workshops</h3>
-            <p>Learn from industry leaders in our monthly events. We cover everything from modern frameworks to software architecture.</p>
-        </div>
-        <!-- Card for Networking -->
-        <div class="card">
-            <img src="https://placehold.co/600x400/8e24aa/ffffff?text=Networking" alt="Image of developers networking">
-            <h3>Networking</h3>
-            <p>Meet other professionals and build your network. It's a great opportunity for collaboration and exchanging ideas.</p>
-        </div>
-        <!-- Card for Projects and Collaboration -->
-        <div class="card">
-            <img src="https://placehold.co/600x400/8e24aa/ffffff?text=Projects+and+Collaboration" alt="Image of a team collaborating on a project">
-            <h3>Projects & Collaboration</h3>
-            <p>Work on open-source projects with the community. Turn your ideas into reality and showcase your skills.</p>
-        </div>
-    </div>
-</div>
+    </main>
 
-<!-- Footer section -->
-<footer class="footer">
-    <p>&copy; 2025 Local Developer Meetup. All Rights Reserved.</p>
-</footer>
+    <footer class="footer">
+        <p>© 2025 Local Developer Meetup. All Rights Reserved.</p>
+    </footer>
 
+    <script>
+        const quizContainer = document.querySelector('.quiz-container');
+        const questionElement = quizContainer.querySelector('.quiz-question');
+        const optionsElement = quizContainer.querySelector('.quiz-options');
+        const resultElement = quizContainer.querySelector('.quiz-result');
+
+        const quizData = [
+            {
+                question: "What does HTML stand for?",
+                options: ["Hyper Text Markup Language", "High-level Text Management Language", "Hyperlink and Text Markup Language", "Hyper Tool Multi-language"],
+                answer: "Hyper Text Markup Language"
+            },
+            {
+                question: "Which of the following is NOT a JavaScript framework?",
+                options: ["React", "Angular", "Python", "Vue"],
+                answer: "Python"
+            },
+            {
+                question: "Which CSS property is used for controlling the space between elements?",
+                options: ["padding", "margin", "border", "spacing"],
+                answer: "margin"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            optionsElement.innerHTML = '';
+            
+            currentQuestion.options.forEach(option => {
+                const li = document.createElement('li');
+                li.textContent = option;
+                li.addEventListener('click', () => selectOption(option));
+                optionsElement.appendChild(li);
+            });
+            resultElement.textContent = '';
+        }
+
+        function selectOption(selectedOption) {
+            const currentQuestion = quizData[currentQuestionIndex];
+            if (selectedOption === currentQuestion.answer) {
+                score++;
+                resultElement.textContent = "Correct!";
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.textContent = `Incorrect. The correct answer was: ${currentQuestion.answer}`;
+                resultElement.style.color = 'red';
+            }
+
+            // Disable options after a choice is made
+            const allOptions = optionsElement.querySelectorAll('li');
+            allOptions.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizData.length) {
+                    loadQuestion();
+                } else {
+                    displayFinalScore();
+                }
+            }, 1500);
+        }
+
+        function displayFinalScore() {
+            quizContainer.innerHTML = `
+                <h2 class="section-title">Quiz Complete!</h2>
+                <div class="quiz-result" style="font-size: 1.5rem; color: #6a1b9a;">
+                    You scored ${score} out of ${quizData.length}
+                </div>
+                <button onclick="location.reload()">Play Again</button>
+            `;
+        }
+
+        loadQuestion();
+    </script>
 </body>
 </html>
