@@ -189,6 +189,41 @@
             text-align: center;
         }
 
+        /* AJAX Search and Quote CSS */
+        #search-container {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        #search-input {
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 400px;
+        }
+        #results-container {
+            text-align: left;
+            margin-top: 1rem;
+        }
+        .developer-card {
+            background: #fff;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+        }
+        #quote-container {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        #quote-display {
+            font-style: italic;
+            color: #555;
+            margin-top: 1rem;
+            min-height: 50px; /* Prevents layout shift */
+        }
+
+
         /* Responsive Styles */
         @media (max-width: 768px) {
             .container {
@@ -253,6 +288,7 @@
             <a href="/">Home</a>
             <a href="/faq">FAQ</a>
             <a href="/contact">Contact</a>
+            <a href="/game">Game</a>
         </nav>
     </header>
 
@@ -284,6 +320,20 @@
             </div>
         </section>
         
+        <!-- AJAX Search Feature -->
+        <section class="container" id="search-container">
+            <h2 class="section-title">Find a Developer</h2>
+            <input type="text" id="searchInput" placeholder="Search by name or skill...">
+            <div id="resultsContainer"></div>
+        </section>
+
+        <!-- AJAX Quote Feature -->
+        <section class="container" id="quote-container">
+            <h2 class="section-title">Daily Inspiration</h2>
+            <p id="quote-display">Click the button below to get an inspiring quote!</p>
+            <button id="getQuoteBtn" class="button">Get Quote</button>
+        </section>
+
         <!-- Interactive Quiz Section -->
         <section class="container quiz-container">
             <h2 class="section-title">Test Your Knowledge!</h2>
@@ -293,7 +343,6 @@
                 <div class="quiz-result"></div>
             </div>
         </section>
-
     </main>
 
     <footer class="footer">
@@ -301,6 +350,7 @@
     </footer>
 
     <script>
+        // Quiz Logic (from Step 10)
         const quizContainer = document.querySelector('.quiz-container');
         const questionElement = quizContainer.querySelector('.quiz-question');
         const optionsElement = quizContainer.querySelector('.quiz-options');
@@ -352,7 +402,6 @@
                 resultElement.style.color = 'red';
             }
 
-            // Disable options after a choice is made
             const allOptions = optionsElement.querySelectorAll('li');
             allOptions.forEach(option => {
                 option.style.pointerEvents = 'none';
@@ -379,6 +428,72 @@
         }
 
         loadQuestion();
+
+        // AJAX Search Logic (Step 11)
+        const searchInput = document.getElementById('searchInput');
+        const resultsContainer = document.getElementById('resultsContainer');
+        let allDevelopers = [];
+
+        // Fetch all developers from the server on page load
+        async function fetchDevelopers() {
+            try {
+                const response = await fetch('/developers');
+                allDevelopers = await response.json();
+                displayDevelopers(allDevelopers);
+            } catch (error) {
+                console.error('Error fetching developers:', error);
+            }
+        }
+
+        function displayDevelopers(developers) {
+            resultsContainer.innerHTML = '';
+            if (developers.length === 0) {
+                resultsContainer.innerHTML = '<p>No developers found.</p>';
+                return;
+            }
+            developers.forEach(developer => {
+                const card = document.createElement('div');
+                card.className = 'developer-card';
+                card.innerHTML = `<strong>${developer.name}</strong> - ${developer.skills}`;
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filteredDevelopers = allDevelopers.filter(developer =>
+                developer.name.toLowerCase().includes(query) ||
+                developer.skills.toLowerCase().includes(query)
+            );
+            displayDevelopers(filteredDevelopers);
+        });
+
+        // AJAX Quote Logic (Step 11)
+        const getQuoteBtn = document.getElementById('getQuoteBtn');
+        const quoteDisplay = document.getElementById('quote-display');
+        
+        async function fetchQuote() {
+            const quotes = [
+                "The only way to do great work is to love what you do. - Steve Jobs",
+                "Code is like humor. When you have to explain it, it’s bad. - Cory House",
+                "The best code is no code at all. - Jeff Atwood",
+                "Programming isn't about what you know; it's about what you can figure out. - Chris Pine",
+                "Talk is cheap. Show me the code. - Linus Torvalds"
+            ];
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            
+            quoteDisplay.textContent = 'Loading...';
+
+            // Simulate a network delay
+            setTimeout(() => {
+                quoteDisplay.textContent = randomQuote;
+            }, 500);
+        }
+
+        getQuoteBtn.addEventListener('click', fetchQuote);
+
+        // Fetch developers on page load
+        fetchDevelopers();
     </script>
 </body>
 </html>

@@ -65,3 +65,16 @@ app.get('/contact', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+// New AJAX route to get a list of developers
+app.get('/developers', (req, res) => {
+    // This data would typically come from a database
+    const developers = [
+        { name: 'Alice Johnson', skills: 'JavaScript, React' },
+        { name: 'Bob Williams', skills: 'Python, Django' },
+        { name: 'Charlie Brown', skills: 'Node.js, Express' },
+        { name: 'Diana Prince', skills: 'HTML, CSS, UI/UX' },
+        { name: 'Eddie Van Halen', skills: 'Java, Spring Boot' },
+    ];
+    res.json(developers);
+});
